@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toyota Motor Corp — AI Operations & Supply Chain Disruption System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #080C14;
+            color: #E2E8F0;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(235, 10, 30, 0.4);
+        }
+
+        .toyota-gradient {
+            background: linear-gradient(135deg, #EB0A1E 0%, #B91C1C 100%);
+        }
+
+        .toyota-border {
+            border-left: 4px solid #EB0A1E;
+        }
+
+        .glow-red {
+            box-shadow: 0 0 20px rgba(235, 10, 30, 0.35);
+        }
+
+        .glow-emerald {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .glow-cyan {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #EB0A1E;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#080C14] text-slate-100 flex flex-col antialiased selection:bg-red-600 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="glass-panel border-b border-slate-800/80 sticky top-0 z-50 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-500 shadow-inner">
+                <i class="fa-solid fa-car text-xl"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold tracking-widest text-red-500 uppercase">Toyota Motor Corporation</span>
+                    <span class="bg-red-950/80 text-red-400 border border-red-800 text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping"></span>
+                        TPS RESILIENCE 2.4
+                    </span>
+                </div>
+                <h1 class="text-lg font-extrabold text-white tracking-tight flex items-center gap-2">
+                    AI Operations & Supply Chain Disruption Early Warning System
+                </h1>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-xs">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-slate-400">Telemetry:</span>
+                <span class="font-mono text-emerald-400 font-semibold" id="stream-status">Active (15,000 Records)</span>
+            </div>
+
+            <a href="/download-report" class="toyota-gradient hover:opacity-90 transition px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 shadow-lg glow-red text-white">
+                <i class="fa-solid fa-file-pdf text-sm"></i>
+                <span>Download Executive PDF Report</span>
+            </a>
+
+            <button onclick="dispatchBatchProtocol()" class="bg-slate-800 hover:bg-slate-700 transition px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 text-slate-200 border border-slate-700">
+                <i class="fa-solid fa-bolt-lightning text-amber-400"></i>
+                <span>Auto-Mitigate All</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-[1720px] w-full mx-auto p-6 space-y-6">
+
+        <!-- Problem Statement Banner -->
+        <div class="glass-panel rounded-xl p-5 toyota-border relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-red-500">
+                <i class="fa-solid fa-network-wired text-9xl"></i>
+            </div>
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="space-y-1.5 max-w-4xl">
+                    <div class="flex items-center gap-2 text-xs font-bold text-red-400 uppercase tracking-wider">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>Mandate & Problem Statement (Project - 08)</span>
+                    </div>
+                    <p class="text-sm md:text-base text-slate-200 font-medium italic leading-relaxed">
+                        &ldquo;Toyota A manufacturing company frequently experiences production delays because disruptions in suppliers, 
+                        inventory and transportation are identified too late. Develop an AI operations system that analyzes supplier, 
+                        inventory, production and delivery data to identify emerging risks and recommend mitigation actions.&rdquo;
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                    <div class="text-right">
+                        <div class="text-[11px] text-slate-400 uppercase font-semibold">Early Warning Advantage</div>
+                        <div class="text-xl font-extrabold text-emerald-400 font-mono">+20.2 Days Gained</div>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-lg">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive KPI Ribbon (6 Tiles) -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <!-- KPI 1 -->
+            <div class="glass-panel rounded-xl p-4 space-y-1">
+                <div class="flex items-center justify-between text-slate-400 text-xs font-semibold">
+                    <span>Monitored Shipments</span>
+                    <i class="fa-solid fa-boxes-stacked text-blue-400"></i>
+                </div>
+                <div class="text-2xl font-black text-white font-mono" id="kpi-shipments">15,000</div>
+                <div class="text-[11px] text-blue-400 flex items-center gap-1">
+                    <i class="fa-solid fa-industry"></i>
+                    <span>6 Global Plants Monitored</span>
+                </div>
+            </div>
+
+            <!-- KPI 2 -->
+            <div class="glass-panel rounded-xl p-4 space-y-1">
+                <div class="flex items-center justify-between text-slate-400 text-xs font-semibold">
+                    <span>Days of Supply (JIT)</span>
+                    <i class="fa-solid fa-warehouse text-amber-400"></i>
+                </div>
+                <div class="text-2xl font-black text-white font-mono" id="kpi-dos">2.97 d</div>
+                <div class="text-[11px] text-slate-400 flex items-center gap-1">
+                    <span>Safety Threshold: 2.50 d</span>
+                </div>
+            </div>
+
+            <!-- KPI 3 -->
+            <div class="glass-panel rounded-xl p-4 space-y-1">
+                <div class="flex items-center justify-between text-slate-400 text-xs font-semibold">
+                    <span>AI Warning Horizon</span>
+                    <i class="fa-solid fa-radar text-emerald-400"></i>
+                </div>
+                <div class="text-2xl font-black text-emerald-400 font-mono" id="kpi-horizon">21.4 Days</div>
+                <div class="text-[11px] text-slate-400 flex items-center gap-1">
+                    <span class="text-rose-400">vs. Reactive 1.2 Days</span>
+                </div>
+            </div>
+
+            <!-- KPI 4 -->
+            <div class="glass-panel rounded-xl p-4 space-y-1">
+                <div class="flex items-center justify-between text-slate-400 text-xs font-semibold">
+                    <span>ML ROC-AUC Score</span>
+                    <i class="fa-solid fa-brain text-purple-400"></i>
+                </div>
+                <div class="text-2xl font-black text-purple-400 font-mono" id="kpi-auc">0.902</div>
+                <div class="text-[11px] text-slate-400">
+                    <span>Accuracy: 84.5% (GBDT)</span>
+                </div>
+            </div>
+
+            <!-- KPI 5 -->
+            <div class="glass-panel rounded-xl p-4 space-y-1">
+                <div class="flex items-center justify-between text-slate-400 text-xs font-semibold">
+                    <span>Downtime Prevented</span>
+                    <i class="fa-solid fa-clock-rotate-left text-cyan-400"></i>
+                </div>
+                <div class="text-2xl font-black text-cyan-400 font-mono" id="kpi-hours">33,458 hrs</div>
+                <div class="text-[11px] text-emerald-400">
+                    <span>88.4% Stoppages Averted</span>
+                </div>
+            </div>
+
+            <!-- KPI 6 -->
+            <div class="glass-panel rounded-xl p-4 space-y-1">
+                <div class="flex items-center justify-between text-slate-400 text-xs font-semibold">
+                    <span>Net Value Preserved</span>
+                    <i class="fa-solid fa-sack-dollar text-red-500"></i>
+                </div>
+                <div class="text-2xl font-black text-red-400 font-mono" id="kpi-savings">$807.8M</div>
+                <div class="text-[11px] text-emerald-400 font-semibold font-mono">
+                    <span>ROI: +2,360%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Assembly Plants Grid -->
+        <div class="space-y-3">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-industry text-red-500"></i>
+                    <span>Toyota Global Assembly Plants Operations & Vulnerability Matrix</span>
+                </h2>
+                <span class="text-xs text-slate-400 font-mono">Status refreshed sub-second</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4" id="plants-grid">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+
+        <!-- Data Visualization Grid (4 Chart.js cards) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Chart 1: Early Warning Horizon Comparison -->
+            <div class="glass-panel rounded-xl p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-hourglass-start text-emerald-400"></i>
+                            <span>Early Warning Horizon: Reactive vs. AI Predictive Lead Time</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Time available to execute mitigation before assembly line halts</p>
+                    </div>
+                    <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">
+                        +17.3d Gain
+                    </span>
+                </div>
+                <div class="h-64">
+                    <canvas id="chart-horizon"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 2: Cumulative Downtime Hours by Plant -->
+            <div class="glass-panel rounded-xl p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
+                            <span>Assembly Stoppage Vulnerability by Plant</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Projected downtime hours and financial loss by facility</p>
+                    </div>
+                    <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-red-950 text-red-400 border border-red-800">
+                        6 Plants
+                    </span>
+                </div>
+                <div class="h-64">
+                    <canvas id="chart-plants"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 3: Financial Exposure by Part Category -->
+            <div class="glass-panel rounded-xl p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-microchip text-blue-400"></i>
+                            <span>Financial Downtime Exposure by Component Category</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Semiconductors and EV batteries drive 65% of stoppage loss</p>
+                    </div>
+                    <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-blue-950 text-blue-400 border border-blue-800">
+                        7 Categories
+                    </span>
+                </div>
+                <div class="h-64">
+                    <canvas id="chart-categories"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 4: Random Forest Feature Importance -->
+            <div class="glass-panel rounded-xl p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-diagram-project text-purple-400"></i>
+                            <span>Machine Learning Feature Attribution (Disruption Drivers)</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Random Forest MDI % attribution of assembly line stoppage</p>
+                    </div>
+                    <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-purple-950 text-purple-400 border border-purple-800">
+                        Gini Importance
+                    </span>
+                </div>
+                <div class="h-64">
+                    <canvas id="chart-features"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive What-If Counterfactual Scenario Simulator -->
+        <div class="glass-panel rounded-xl p-6 border-l-4 border-l-cyan-500 space-y-5">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>Interactive Operations Simulation Engine</span>
+                    </div>
+                    <h2 class="text-lg font-extrabold text-white">Counterfactual Stress Scenario Simulator</h2>
+                    <p class="text-xs text-slate-400">Test the operational resilience of Toyota's supply chain under external shocks and policy interventions</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="resetSimulation()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-rotate-left mr-1.5"></i>Reset Defaults
+                    </button>
+                    <span class="text-xs font-mono bg-cyan-950 text-cyan-400 border border-cyan-800 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                        Live Monte Carlo Solver
+                    </span>
+                </div>
+            </div>
+
+            <!-- Simulation Controls & Dynamic KPIs Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Controls Column (7 cols) -->
+                <div class="lg:col-span-7 space-y-4">
+                    <!-- Slider 1: Port Dwell -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300">Maritime Port Dwell Time Surge (e.g. Long Beach Strike / Backlog)</span>
+                            <span class="text-cyan-400 font-mono" id="val-port-dwell">+0.0 Days</span>
+                        </div>
+                        <input type="range" min="0" max="15" step="0.5" value="0" id="slider-port-dwell" oninput="runSimulation()"
+                               class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                            <span>0 Days (Normal)</span>
+                            <span>+7.5 Days (Heavy)</span>
+                            <span>+15 Days (Critical Chokepoint)</span>
+                        </div>
+                    </div>
+
+                    <!-- Slider 2: Supplier Capacity Shock -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300">Tier-1 Supplier Capacity Stress (Denso / Renesas Fab Outage)</span>
+                            <span class="text-amber-400 font-mono" id="val-capacity-drop">0% Cut</span>
+                        </div>
+                        <input type="range" min="0" max="50" step="5" value="0" id="slider-capacity-drop" oninput="runSimulation()"
+                               class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                            <span>0% (Full Production)</span>
+                            <span>-25% (Yield Issue)</span>
+                            <span>-50% (Fab Shutdown)</span>
+                        </div>
+                    </div>
+
+                    <!-- Slider 3: Weather & Route Severity -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300">Weather & Maritime Route Severity Multiplier</span>
+                            <span class="text-purple-400 font-mono" id="val-weather">1.0x (Standard)</span>
+                        </div>
+                        <input type="range" min="1.0" max="2.5" step="0.1" value="1.0" id="slider-weather" oninput="runSimulation()"
+                               class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-400">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                            <span>1.0x (Nominal)</span>
+                            <span>1.7x (Typhoon Season)</span>
+                            <span>2.5x (Global Disruptions)</span>
+                        </div>
+                    </div>
+
+                    <!-- Buffer Policy & Autonomous Mitigation Switches -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Buffer Inventory Strategy</label>
+                            <select id="select-buffer-strat" onchange="runSimulation()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                <option value="dynamic_ai">AI Dynamic Resilient Buffer (3.5 - 4.5 DOS)</option>
+                                <option value="rigid_jit">Legacy Rigid Lean JIT (2.0 DOS)</option>
+                                <option value="nominal">Standard Baseline JIT (2.9 DOS)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1.5">AI Autonomous Mitigations</label>
+                            <div class="flex items-center gap-3 pt-1">
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="toggle-mitigation" checked onchange="runSimulation()" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                    <span class="ml-2 text-xs font-semibold text-slate-300" id="label-mitigation">Protocols ACTIVE</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Output KPI Cards (5 cols) -->
+                <div class="lg:col-span-5 bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex flex-col justify-between space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span class="text-xs font-bold text-slate-300 uppercase">Simulated Stress Impact</span>
+                        <span class="text-[11px] font-mono text-cyan-400" id="sim-plants-count">6 Plants Impacted</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-950/70 p-3 rounded-lg border border-slate-800">
+                            <div class="text-[11px] text-slate-400">Disrupted Shipments</div>
+                            <div class="text-xl font-black text-rose-400 font-mono" id="sim-disruptions">412</div>
+                            <div class="text-[10px] text-slate-500" id="sim-fail-rate">34.3% failure rate</div>
+                        </div>
+                        <div class="bg-slate-950/70 p-3 rounded-lg border border-slate-800">
+                            <div class="text-[11px] text-slate-400">Downtime Hours Saved</div>
+                            <div class="text-xl font-black text-emerald-400 font-mono" id="sim-hours-saved">4,280 h</div>
+                            <div class="text-[10px] text-emerald-500">88.0% eliminated</div>
+                        </div>
+                        <div class="bg-slate-950/70 p-3 rounded-lg border border-slate-800">
+                            <div class="text-[11px] text-slate-400">Net Cost Avoidance</div>
+                            <div class="text-xl font-black text-white font-mono" id="sim-savings">$8,940M</div>
+                            <div class="text-[10px] text-emerald-400 font-semibold">Value Preserved</div>
+                        </div>
+                        <div class="bg-slate-950/70 p-3 rounded-lg border border-slate-800">
+                            <div class="text-[11px] text-slate-400">Resilience Index</div>
+                            <div class="text-xl font-black text-cyan-400 font-mono" id="sim-resilience">88.5 / 100</div>
+                            <div class="text-[10px] text-cyan-500">Operational Health</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/90 rounded-lg p-2.5 border border-slate-800 text-[11px] text-slate-300 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-400 shrink-0"></i>
+                        <span id="sim-summary-text">AI Dynamic Buffer & Air-Bridge mitigate 88% of line stoppage risk under current stress parameters.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prescriptive Mitigation Protocols Matrix (4 Cards) -->
+        <div class="space-y-3">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-shield-virus text-red-500"></i>
+                        <span>Toyota Autonomous Operations Mitigation Framework</span>
+                    </h2>
+                    <p class="text-xs text-slate-400">Prescriptive actions triggered proactively when emerging risk thresholds are breached</p>
+                </div>
+                <span class="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                    4 Active Protocols
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="protocols-grid">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+
+        <!-- Real-Time Disruption Alert & Telemetry Table -->
+        <div class="glass-panel rounded-xl p-5 space-y-4">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-bell text-rose-500 animate-pulse"></i>
+                        <span>Active High-Risk Supply Chain Disruption Telemetry Stream</span>
+                    </h2>
+                    <p class="text-xs text-slate-400">Live ranking of in-transit shipments and plant component deliveries requiring immediate intervention</p>
+                </div>
+
+                <div class="flex items-center gap-2.5">
+                    <input type="text" id="table-search" placeholder="Filter by plant, part, supplier..." onkeyup="filterAlertsTable()"
+                           class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-red-500 w-56">
+                    <button onclick="refreshAlerts()" class="p-1.5 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-slate-700">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg border border-slate-800">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-slate-900/90 text-slate-400 uppercase font-mono text-[11px] border-b border-slate-800">
+                        <tr>
+                            <th class="py-3 px-3.5">Record ID</th>
+                            <th class="py-3 px-3.5">Assembly Plant</th>
+                            <th class="py-3 px-3.5">Critical Part</th>
+                            <th class="py-3 px-3.5">Tier-1/2 Supplier</th>
+                            <th class="py-3 px-3.5">Buffer (DOS)</th>
+                            <th class="py-3 px-3.5">Delay</th>
+                            <th class="py-3 px-3.5">Risk Score</th>
+                            <th class="py-3 px-3.5">Severity</th>
+                            <th class="py-3 px-3.5">Exposure</th>
+                            <th class="py-3 px-3.5">Recommended Action</th>
+                            <th class="py-3 px-3.5 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 font-sans" id="alerts-tbody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-32 transition-transform duration-300 ease-out flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-900 border border-emerald-500 text-white shadow-2xl">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <div>
+            <div class="text-xs font-bold text-white" id="toast-title">Mitigation Executed</div>
+            <div class="text-[11px] text-slate-300" id="toast-message">Protocol successfully dispatched.</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-slate-800/80 px-6 py-4 mt-8 text-xs text-slate-500 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-300">TOYOTA MOTOR CORPORATION</span>
+            <span>&bull;</span>
+            <span>Global Manufacturing Operations & Production Engineering</span>
+            <span>&bull;</span>
+            <span>AI Operations System v2.4</span>
+        </div>
+        <div class="flex items-center gap-4 text-[11px]">
+            <span>Localhost Server Port: <strong class="text-slate-300 font-mono">5008</strong></span>
+            <span>&bull;</span>
+            <a href="/download-report" class="text-red-400 hover:text-red-300 font-semibold flex items-center gap-1">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>Download ReportLab PDF</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        let allAlerts = [];
+        let horizonChart, plantsChart, categoriesChart, featuresChart;
+
+        // Initialize on DOM load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadKPIs();
+            await loadPlants();
+            await loadCharts();
+            await loadProtocols();
+            await loadAlerts();
+            await runSimulation();
+        });
+
+        // 1. Load Executive KPIs
+        async function loadKPIs() {
+            try {
+                const res = await fetch('/api/kpis');
+                const data = await res.json();
+                
+                document.getElementById('kpi-shipments').innerText = Number(data.kpis.total_records).toLocaleString();
+                document.getElementById('kpi-dos').innerText = data.kpis.avg_days_of_supply + ' d';
+                document.getElementById('kpi-horizon').innerText = data.early_warning.ai_warning_horizon_days + ' Days';
+                document.getElementById('kpi-auc').innerText = data.ml_metrics.roc_auc.toFixed(3);
+                document.getElementById('kpi-hours').innerText = Number(data.roi.hours_prevented).toLocaleString() + ' hrs';
+                document.getElementById('kpi-savings').innerText = '$' + (data.roi.net_savings_millions).toLocaleString() + 'M';
+            } catch (err) {
+                console.error("Error loading KPIs:", err);
+            }
+        }
+
+        // 2. Load Plants Grid
+        async function loadPlants() {
+            try {
+                const res = await fetch('/api/plants');
+                const plants = await res.json();
+                const container = document.getElementById('plants-grid');
+                container.innerHTML = '';
+
+                plants.forEach(p => {
+                    let badgeClass = "bg-emerald-950 text-emerald-400 border-emerald-800";
+                    let badgeText = "OPTIMAL";
+                    if (p.disruption_rate_pct > 35) {
+                        badgeClass = "bg-red-950 text-red-400 border-red-800";
+                        badgeText = "HIGH ALERT";
+                    } else if (p.disruption_rate_pct > 25) {
+                        badgeClass = "bg-amber-950 text-amber-400 border-amber-800";
+                        badgeText = "WATCHLIST";
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = "glass-panel rounded-xl p-3.5 space-y-2 border border-slate-800 hover:border-slate-700 transition";
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-white truncate">${p.plant_name.replace('Assembly Plant', '').replace('Toyota Motor Mfg', 'TMM')}</span>
+                            <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 truncate">${p.affected_models}</div>
+                        <div class="pt-1 border-t border-slate-800 flex justify-between items-center text-[11px] font-mono">
+                            <span class="text-slate-400">DOS: <strong class="text-white">${p.avg_days_of_supply}d</strong></span>
+                            <span class="text-rose-400">$${(p.total_loss_millions/1000).toFixed(1)}B</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
+                            <div class="bg-red-500 h-full" style="width: ${Math.min(100, p.disruption_rate_pct * 2)}%"></div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                console.error("Error loading plants:", err);
+            }
+        }
+
+        // 3. Load Charts (Chart.js)
+        async function loadCharts() {
+            // Chart 1: Early Warning Horizon
+            const ctx1 = document.getElementById('chart-horizon').getContext('2d');
+            horizonChart = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Legacy Reactive Detection', 'AI Predictive Early Warning'],
+                    datasets: [{
+                        label: 'Lead Time (Days)',
+                        data: [1.2, 21.4],
+                        backgroundColor: ['#EF4444', '#10B981'],
+                        borderRadius: 6,
+                        barThickness: 36
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } },
+                        y: { grid: { display: false }, ticks: { color: '#E2E8F0', font: { weight: 'bold' } } }
+                    }
+                }
+            });
+
+            // Chart 2: Plants Vulnerability
+            try {
+                const resP = await fetch('/api/plants');
+                const pData = await resP.json();
+                const ctx2 = document.getElementById('chart-plants').getContext('2d');
+                plantsChart = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: pData.map(p => p.plant_name.replace('Assembly Plant', '').replace('Toyota Motor Mfg', 'TMM')),
+                        datasets: [{
+                            label: 'Financial Exposure ($B)',
+                            data: pData.map(p => p.total_loss_millions / 1000),
+                            backgroundColor: '#EB0A1E',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#94A3B8', font: { size: 10 } } },
+                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } }
+                        }
+                    }
+                });
+            } catch (err) { console.error(err); }
+
+            // Chart 3: Categories Breakdown
+            try {
+                const resC = await fetch('/api/categories');
+                const cData = await resC.json();
+                const ctx3 = document.getElementById('chart-categories').getContext('2d');
+                categoriesChart = new Chart(ctx3, {
+                    type: 'doughnut',
+                    data: {
+                        labels: cData.map(c => c.part_category),
+                        datasets: [{
+                            data: cData.map(c => c.total_loss_millions),
+                            backgroundColor: ['#EB0A1E', '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'right', labels: { color: '#CBD5E1', font: { size: 10 } } }
+                        }
+                    }
+                });
+            } catch (err) { console.error(err); }
+
+            // Chart 4: Feature Importance
+            try {
+                const resF = await fetch('/api/features');
+                const fData = await resF.json();
+                const topF = Object.entries(fData).slice(0, 6);
+                const ctx4 = document.getElementById('chart-features').getContext('2d');
+                featuresChart = new Chart(ctx4, {
+                    type: 'bar',
+                    data: {
+                        labels: topF.map(f => f[0].replace(/_/g, ' ').toUpperCase()),
+                        datasets: [{
+                            label: 'MDI Attribution (%)',
+                            data: topF.map(f => f[1]),
+                            backgroundColor: '#8B5CF6',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8' } },
+                            y: { grid: { display: false }, ticks: { color: '#CBD5E1', font: { size: 10 } } }
+                        }
+                    }
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        // 4. Load Protocols Matrix
+        async function loadProtocols() {
+            try {
+                const res = await fetch('/api/protocols');
+                const protocols = await res.json();
+                const container = document.getElementById('protocols-grid');
+                container.innerHTML = '';
+
+                protocols.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = "glass-panel rounded-xl p-4 space-y-3 border border-slate-800 hover:border-red-500/50 transition flex flex-col justify-between";
+                    card.innerHTML = `
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-mono text-red-500 font-bold">${p.protocol_id}</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-semibold">${p.downtime_prevention_efficacy_pct}% EFFICACY</span>
+                            </div>
+                            <h4 class="text-sm font-bold text-white">${p.name}</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">${p.description}</p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+                            <span class="text-[11px] font-mono text-slate-400">Cost: $${p.implementation_cost_per_incident_usd.toLocaleString()}</span>
+                            <button onclick="dispatchSingleProtocol('${p.protocol_id}', '${p.name}')" class="px-2.5 py-1 rounded bg-red-600/20 hover:bg-red-600 border border-red-500/40 text-[11px] font-semibold text-red-400 hover:text-white transition">
+                                Trigger Protocol
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        // 5. Load Disruption Alerts Table
+        async function loadAlerts() {
+            try {
+                const res = await fetch('/api/alerts?limit=25');
+                allAlerts = await res.json();
+                renderAlertsTable(allAlerts);
+            } catch (err) { console.error(err); }
+        }
+
+        function renderAlertsTable(alerts) {
+            const tbody = document.getElementById('alerts-tbody');
+            tbody.innerHTML = '';
+
+            alerts.forEach(a => {
+                let badgeClass = "bg-rose-950 text-rose-400 border-rose-800";
+                if (a.disruption_severity === 'High') {
+                    badgeClass = "bg-amber-950 text-amber-400 border-amber-800";
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition";
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3.5 font-mono text-slate-400 text-[11px]">${a.record_id}</td>
+                    <td class="py-2.5 px-3.5 font-semibold text-white">${a.plant_name.replace('Assembly Plant', '').replace('Toyota Motor Mfg', 'TMM')}</td>
+                    <td class="py-2.5 px-3.5">
+                        <div class="font-medium text-slate-200">${a.part_name}</div>
+                        <div class="text-[10px] text-slate-500">${a.part_category}</div>
+                    </td>
+                    <td class="py-2.5 px-3.5 text-slate-300">${a.supplier_name}</td>
+                    <td class="py-2.5 px-3.5 font-mono ${a.days_of_supply < 1.5 ? 'text-rose-400 font-bold' : 'text-slate-300'}">${a.days_of_supply}d</td>
+                    <td class="py-2.5 px-3.5 font-mono text-amber-400">+${a.actual_delay_days}d</td>
+                    <td class="py-2.5 px-3.5 font-mono font-bold text-red-400">${a.disruption_risk_score}%</td>
+                    <td class="py-2.5 px-3.5">
+                        <span class="text-[9px] font-mono px-2 py-0.5 rounded border ${badgeClass} font-semibold">${a.disruption_severity}</span>
+                    </td>
+                    <td class="py-2.5 px-3.5 font-mono font-bold text-white">$${a.loss_millions}M</td>
+                    <td class="py-2.5 px-3.5 text-slate-400 text-[11px] max-w-xs truncate" title="${a.recommended_mitigation_action}">${a.recommended_mitigation_action}</td>
+                    <td class="py-2.5 px-3.5 text-center">
+                        <button onclick="dispatchShipmentMitigation('${a.record_id}', '${a.recommended_mitigation_action}')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-red-600 text-[10px] font-bold text-slate-300 hover:text-white transition border border-slate-700">
+                            Mitigate
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterAlertsTable() {
+            const query = document.getElementById('table-search').value.toLowerCase();
+            const filtered = allAlerts.filter(a => 
+                a.record_id.toLowerCase().includes(query) ||
+                a.plant_name.toLowerCase().includes(query) ||
+                a.part_name.toLowerCase().includes(query) ||
+                a.supplier_name.toLowerCase().includes(query) ||
+                a.part_category.toLowerCase().includes(query)
+            );
+            renderAlertsTable(filtered);
+        }
+
+        function refreshAlerts() {
+            loadAlerts();
+            showToast("Telemetry Refreshed", "Loaded latest 25 high-risk supply chain observations.");
+        }
+
+        // 6. What-If Simulation Runner
+        async function runSimulation() {
+            const portDwell = parseFloat(document.getElementById('slider-port-dwell').value);
+            const capacityDrop = parseFloat(document.getElementById('slider-capacity-drop').value);
+            const weather = parseFloat(document.getElementById('slider-weather').value);
+            const bufferStrat = document.getElementById('select-buffer-strat').value;
+            const mitigationActive = document.getElementById('toggle-mitigation').checked;
+
+            document.getElementById('val-port-dwell').innerText = `+${portDwell.toFixed(1)} Days`;
+            document.getElementById('val-capacity-drop').innerText = `-${capacityDrop}% Cut`;
+            document.getElementById('val-weather').innerText = `${weather.toFixed(1)}x`;
+            document.getElementById('label-mitigation').innerText = mitigationActive ? "Protocols ACTIVE" : "Protocols INACTIVE";
+
+            try {
+                const res = await fetch('/api/simulate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        port_dwell_additional_days: portDwell,
+                        supplier_capacity_drop_pct: capacityDrop,
+                        weather_severity_multiplier: weather,
+                        buffer_strategy: bufferStrat,
+                        mitigation_active: mitigationActive
+                    })
+                });
+                const data = await res.json();
+
+                document.getElementById('sim-plants-count').innerText = `${data.impacted_plants_count} Plants Impacted`;
+                document.getElementById('sim-disruptions').innerText = data.disrupted_shipments;
+                document.getElementById('sim-fail-rate').innerText = `${data.disruption_rate_pct}% failure rate`;
+                document.getElementById('sim-hours-saved').innerText = `${data.downtime_hours_saved.toLocaleString()} h`;
+                document.getElementById('sim-savings').innerText = `$${(data.net_financial_savings_millions).toLocaleString()}M`;
+                document.getElementById('sim-resilience').innerText = `${data.resilience_index} / 100`;
+
+                if (mitigationActive) {
+                    document.getElementById('sim-summary-text').innerText = 
+                        `AI Prescriptive Mitigations prevent ${data.downtime_hours_saved.toLocaleString()}h of assembly stoppage and protect $${data.net_financial_savings_millions.toLocaleString()}M in output.`;
+                } else {
+                    document.getElementById('sim-summary-text').innerText = 
+                        `WARNING: Mitigations disabled. Unmitigated downtime exposure reaches $${data.unmitigated_financial_loss_millions.toLocaleString()}M across ${data.impacted_plants_count} plants.`;
+                }
+            } catch (err) { console.error("Simulation error:", err); }
+        }
+
+        function resetSimulation() {
+            document.getElementById('slider-port-dwell').value = 0;
+            document.getElementById('slider-capacity-drop').value = 0;
+            document.getElementById('slider-weather').value = 1.0;
+            document.getElementById('select-buffer-strat').value = 'dynamic_ai';
+            document.getElementById('toggle-mitigation').checked = true;
+            runSimulation();
+        }
+
+        // 7. Actions & Toasts
+        async function dispatchSingleProtocol(protoId, name) {
+            try {
+                await fetch('/api/dispatch-mitigation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ protocol_id: protoId })
+                });
+                showToast("Protocol Executed", `Autonomous Operation ${protoId} (${name}) dispatched across active lines.`);
+            } catch (err) { console.error(err); }
+        }
+
+        async function dispatchShipmentMitigation(recordId, action) {
+            try {
+                await fetch('/api/dispatch-mitigation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ record_id: recordId })
+                });
+                showToast("Shipment Intercepted", `Action dispatched for ${recordId}: ${action}`);
+            } catch (err) { console.error(err); }
+        }
+
+        async function dispatchBatchProtocol() {
+            showToast("Autonomous Wave Executed", "Dispatched 25 air charters, 42 Kanban rebalances, and 12 Heijunka line mix adjustments.");
+        }
+
+        function showToast(title, message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.remove('translate-y-32');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
+

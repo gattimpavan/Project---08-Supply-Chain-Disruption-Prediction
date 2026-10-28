@@ -1,0 +1,19 @@
+supplier_id,name,country,tier,primary_category,single_source,base_otd,base_defect_ppm
+SUP-101,Denso Corporation,Japan,Tier-1,Semiconductor ECUs,0,0.96,12
+SUP-102,Renesas Electronics,Japan,Tier-1,Semiconductor ECUs,1,0.88,35
+SUP-103,Bosch Automotive,Germany,Tier-1,ADAS & LiDAR Sensors,0,0.94,18
+SUP-104,Primearth EV Energy (PEVE),Japan,Tier-1,Lithium-Ion Battery Modules,1,0.91,24
+SUP-105,Panasonic Energy,Japan,Tier-1,Lithium-Ion Battery Modules,0,0.95,15
+SUP-106,Yazaki Corporation,Japan,Tier-1,Wire Harnesses & Connectors,0,0.87,48
+SUP-107,Sumitomo Electric Wiring,Japan,Tier-1,Wire Harnesses & Connectors,0,0.89,42
+SUP-108,Aisin Corporation,Japan,Tier-1,Transmission & Differential,0,0.97,10
+SUP-109,Toyota Boshoku,Japan,Tier-1,Interior Systems & Stamped Steel,0,0.96,14
+SUP-110,JTEKT Corporation,Japan,Tier-1,Steering & Suspension,0,0.95,16
+SUP-111,Nippon Steel Corp,Japan,Tier-2,Interior Systems & Stamped Steel,1,0.9,28
+SUP-112,Continental AG,Germany,Tier-1,ADAS & LiDAR Sensors,0,0.92,22
+SUP-113,TSMC (Silicon Foundry),Taiwan,Tier-2,Semiconductor ECUs,1,0.85,38
+SUP-114,CATL Battery Technology,China,Tier-1,Lithium-Ion Battery Modules,0,0.9,32
+SUP-115,Lear Corporation,USA,Tier-1,Wire Harnesses & Connectors,0,0.91,29
+SUP-116,ZF Friedrichshafen,Germany,Tier-1,Transmission & Differential,0,0.93,20
+SUP-117,Magna International,Canada,Tier-1,Interior Systems & Stamped Steel,0,0.93,21
+SUP-118,Mobis Parts,South Korea,Tier-2,Steering & Suspension,0,0.89,34

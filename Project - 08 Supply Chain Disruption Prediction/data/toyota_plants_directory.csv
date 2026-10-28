@@ -1,0 +1,7 @@
+plant_id,plant_name,location,region,models,daily_target_units,hourly_downtime_cost_usd,takt_time_sec
+PLANT-JPN-01,Tsutsumi Assembly Plant,"Toyota City, Japan",Japan/APAC,"Prius, RAV4, Camry",1500,1850000,58
+PLANT-JPN-02,Tahara Assembly Plant,"Aichi, Japan",Japan/APAC,"Land Cruiser, Lexus LS, Lexus NX",1100,2400000,65
+PLANT-JPN-03,Motomachi Assembly Plant,"Toyota City, Japan",Japan/APAC,"Crown, bZ4X EV, Mirai, GR Yaris",850,2100000,72
+PLANT-USA-01,Toyota Motor Mfg Kentucky (TMMK),"Georgetown, Kentucky, USA",North America,"Camry, RAV4 Hybrid, Grand Highlander",1800,2250000,54
+PLANT-USA-02,Toyota Motor Mfg Indiana (TMMI),"Princeton, Indiana, USA",North America,"Highlander, Sienna Minivan, Lexus TX",1350,1950000,60
+PLANT-EUR-01,Toyota Motor Mfg UK (TMUK),"Burnaston, Derbyshire, UK",Europe,"Corolla Hatchback, Corolla Touring Sports",950,1650000,62
